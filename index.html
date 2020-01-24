@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+
+</style>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="jqueryui/jquery-ui.min.js"></script>
+     <script type="text/javascript" src="maphilight/jquery.maphilight.js"></script>
+     <script type="text/javascript" src="jquery.imagemapster.js"></script>
+    <link rel="stylesheet" type="text/css" href="jquery-ui/jquery-ui.css">
+     <link rel="stylesheet" type="text/css" href="jquery-ui/jquery-ui.min.css">
+    <script type="text/javascript">$(function() {
+        $('.QuickMap').maphilight();
+
+    });</script>
+</head>
+<body>
+	<img src="test.jpg" alt="QuickMap" class="QuickMap" usemap="#QuickMap" />
+	<map name="QuickMap">
+	<area alt="aa" title="aa" class="area" href="#" shape="rect" coords="61,684,1014,889" data-id='122741' data-alias='5e279576b7ed0'/>
+	<area alt="bb" title="bb" class="area" href="#" shape="rect" coords="54,1554,993,1766" data-id='122741' data-alias='5e279576b7ed0'/>
+	<area alt="cc" title="cc" class="area" href="#" shape="rect" coords="55,1149,1004,1308" data-x='201.5000' data-y='2129.8550' data-h='417.1050' data-w='810.0300'
+            data-id='122741' data-alias='5e279576b7ed0'/>
+
+	
+	
+	</map>
+
+	<div id="dialogWindow" title="">
+    <iframe style="width:100%; height:100%; border:none">
+    </iframe>
+</div>
+
+<script>
+ $(document).ready(function(){  
+    $("#dialogWindow").dialog({
+       autoOpen:false, 
+       modal:true,
+       dialogClass: 'pdialog',
+          show: {
+            effect: "fade",
+            duration: 1000,
+            direction : "down"
+          },
+          hide: {
+            effect: "fade",
+            duration: 1000,
+            direction : "down"
+          },
+       height:600,
+       width:1200,       
+       close: function( event, ui ) {
+           $("#dialogWindow iframe").attr("src","about:blank");
+       },
+    });
+
+    $(".area").on("click", function(e) {
+        e.preventDefault();
+        
+        if($(window).width() <= 768){
+            //Open in New Window on Mobile Devices
+            $('.area').mapster('deselect');
+              
+            var id = $(this).attr("data-id");
+            var alias = $(this).attr("data-alias");
+
+            var url = "/m/[id]/[alias]"
+            url = url.replace("[id]",id);
+            url = url.replace("[alias]",alias);
+ 
+            window.open(url,"_blank");
+            return false;
+        }
+        
+        
+        $('.area').mapster('deselect');
+        var id = $(this).attr("data-id");
+        var alias = $(this).attr("data-alias");
+        alert(id);
+        var url = "/m/[id]/[alias]";
+        url = url.replace("[id]",id);
+        url = url.replace("[alias]",alias);
+        
+        $("#dialogWindow iframe").attr("src",url);
+        $("#dialogWindow").dialog("open");
+ 
+    });
+ });    
+</script>
+</body>
+</html>
